@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../types/navigations';
 import { Memo } from '../../types/memo';
+import { useDeleteMemo } from '../../hooks/memo/useDeleteMemo';
 
 type Props = {
   memo: Memo;
@@ -13,12 +14,13 @@ type Props = {
 export default function MemoListItem(props: Props) {
   const { memo } = props;
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const { deleteMemo } = useDeleteMemo();
   return (
     <View>
       <TouchableOpacity
         style={styles.memoListItem}
         onPress={() => {
-          navigation.navigate('MemoEdit');
+          navigation.navigate('MemoDetail', { id: memo.id });
         }}
       >
         <View>
@@ -27,7 +29,7 @@ export default function MemoListItem(props: Props) {
           </Text>
           <Text style={styles.memoListItemDate}>{memo.updatedAt}</Text>
         </View>
-        <TouchableOpacity style={styles.memoDelete} onPress={() => Alert.alert('Are you sure?')}>
+        <TouchableOpacity style={styles.memoDelete} onPress={() => deleteMemo(memo.id)}>
           <Ionicons name="close" size={24} color="#B0B0B0" />
         </TouchableOpacity>
       </TouchableOpacity>

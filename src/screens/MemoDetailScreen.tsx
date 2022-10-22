@@ -1,36 +1,41 @@
+import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+import tailwind from 'tailwind-rn';
 import CircleButton from '../components/UIkit/CircleButton';
+import { Loading } from '../components/UIkit/Loading';
+import { useGetMemo } from '../hooks/memo/useGetMemo';
 import { RootStackParamList } from '../types/navigations';
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'MemoDetail'>;
+  route: RouteProp<RootStackParamList, 'MemoDetail'>;
 };
 
 export default function MemoDetailScreen(props: Props) {
-  const { navigation } = props;
+  const { navigation, route } = props;
+  const { id } = route.params;
+  const { memo, isLoading } = useGetMemo(id);
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.memoHeader}>
-        <Text style={styles.memoTitle}>買い物リスト</Text>
-        <Text style={styles.memoDate}>2020年12月24日 10:00</Text>
+        <Text style={styles.memoTitle}>{memo && memo.text}</Text>
+        <Text style={styles.memoDate}>{memo && memo.updatedAt}</Text>
       </View>
       <ScrollView style={styles.memoBody}>
-        <Text style={styles.memoText}>
-          買い物リスト 書体やレイアウトな土を確認するため。
-          確認用確認用確認用確認用確認用確認用確認用確認用確認用確認用確認用確認用確認用確認用確認用確認用確認用確認用
-        </Text>
+        <Text style={styles.memoText}>{memo && memo.text}</Text>
       </ScrollView>
       <CircleButton
         style={{ top: 60, bottom: 'auto' }}
         name="edit-2"
         onPress={() => {
-          navigation.navigate('MemoEdit');
+          navigation.navigate('MemoEdit', { memo: memo! });
         }}
       />
-    </View>
+      <Loading visible={isLoading} />
+    </SafeAreaView>
   );
 }
 

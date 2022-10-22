@@ -3,16 +3,18 @@ import { collection, query, onSnapshot, orderBy } from 'firebase/firestore';
 import { auth, db } from '../../utils/firebaseConfig';
 import { Memo } from '../../types/memo';
 import { format } from 'date-fns';
+import { dateToString, firebaseErr } from '../../utils/firebase';
 
 export const useGetMemos = () => {
-  const [memos, setMemos] = useState<Memo[]>();
-  const [getErr, setGetErr] = useState('');
+  const [memos, setMemos] = useState<Memo[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    const getMemos = () => {
-      setGetErr('');
-      setIsLoading(true);
+    console.log('A地点');
+    setIsLoading(true);
+    console.log('B地点');
+    const getMemos = async () => {
+      console.log('aa' + isLoading);
       const { currentUser } = auth;
       if (currentUser) {
         console.log(currentUser.uid);
@@ -23,15 +25,16 @@ export const useGetMemos = () => {
           ({
             id: doc.id,
             text: doc.data().text,
-            updatedAt:format(doc.data({ serverTimestamps: 'estimate' }).updatedAt.toDate(), 'yyyy-MM-dd HH:mm')
+            updatedAt: dateToString(doc.data({ serverTimestamps: 'estimate' }).updatedAt)
           } as Memo)
         ))},
         (err: any) => {
-          setGetErr(err.message);
+          firebaseErr(err);
         })
       }
       setIsLoading(false);
     };
+    getMemos();
     return () => {
       getMemos();
     };
@@ -39,7 +42,6 @@ export const useGetMemos = () => {
 
   return {
     memos,
-    getErr,
     isLoading,
   };
 };

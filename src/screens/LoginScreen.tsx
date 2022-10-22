@@ -5,6 +5,7 @@ import { auth } from '../utils/firebaseConfig';
 import Button from '../components/UIkit/Button';
 import { useAuth } from '../hooks/Auth/useAuth';
 import tw from 'tailwind-rn';
+import { ErrMsg } from '../components/UIkit/ErrMsg';
 
 export default function LoginScreen(props: any) {
   const { navigation } = props;
@@ -34,7 +35,7 @@ export default function LoginScreen(props: any) {
           secureTextEntry // 伏せ字にする
           textContentType="password"
         />
-        {authError !== '' && <Text style={tw('text-red-500 my-3 font-bold')}>{authError}</Text>}
+        <ErrMsg msg={authError} />
         <Button label="Submit" onPress={() => signIn(email, password)} />
         <View style={styles.footer}>
           <Text style={styles.footerText}>Not registered?</Text>

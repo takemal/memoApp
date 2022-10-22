@@ -5,3 +5,9 @@ export type Memo = {
   text: string;
   updatedAt: string;
 };
+
+export const initialMemo = {
+  id: '',
+  text: '',
+  updatedAt: '',
+};

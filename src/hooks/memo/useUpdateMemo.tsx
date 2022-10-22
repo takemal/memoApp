@@ -4,17 +4,15 @@ import { useNavigation } from '@react-navigation/native';
 import { auth, db } from '../../utils/firebaseConfig';
 import { firebaseErr } from '../../utils/firebase';
 
-export const useCreateMemo = () => {
+export const useUpdateMemo = () => {
   const navigation = useNavigation();
   const { currentUser } = auth;
-  const [createErr, setCreateErr] = useState('');
 
-  const createMemo = async (text: string) => {
-    setCreateErr('');
+  const updateMemo = async (id: string, text: string) => {
     if (currentUser) {
       if (text !== '') {
         try {
-          const memoDocRef = doc(collection(db, 'users', currentUser.uid, 'memos'));
+          const memoDocRef = doc(db, 'users', currentUser.uid, 'memos', id);
           await setDoc(
             memoDocRef,
             {
@@ -31,6 +29,6 @@ export const useCreateMemo = () => {
     }
   };
   return {
-    createMemo,
+    updateMemo,
   };
 };

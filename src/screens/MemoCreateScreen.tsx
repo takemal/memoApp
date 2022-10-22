@@ -10,7 +10,7 @@ import tw from 'tailwind-rn';
 
 export default function MemoCreateScreen() {
   const [bodyText, setBodyText] = useState('');
-  const { createMemo, createErr } = useCreateMemo();
+  const { createMemo } = useCreateMemo();
 
   return (
     <SafeAreaView style={tw('flex-1')}>

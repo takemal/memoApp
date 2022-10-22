@@ -5,6 +5,7 @@ import { collection, doc, getDoc, setDoc, Timestamp } from 'firebase/firestore';
 import { useState } from 'react';
 import { Alert } from 'react-native';
 import { RootStackParamList } from '../../types/navigations';
+import { firebaseErr } from '../../utils/firebase';
 import { auth } from '../../utils/firebaseConfig';
 
 export const useAuth = () => {
@@ -33,16 +34,8 @@ export const useAuth = () => {
       if (user) {
         Alert.alert('新規登録が完了しました');
       }
-    } catch (error: any) {
-      if (error.message === 'Firebase: Error (auth/email-already-in-use).') {
-        setAuthError('新規登録に失敗しました。既に登録されているメールアドレスです。');
-      }
-      if (error.message === 'Firebase: Error (auth/invalid-email).') {
-        setAuthError('新規登録に失敗しました。不正な形式のメールアドレスです。');
-      }
-      if (error.message === 'Firebase: Password should be at least 6 characters (auth/weak-password).') {
-        setAuthError('新規登録に失敗しました。パスワードは6文字以上で入力してください。');
-      }
+    } catch (err: any) {
+      firebaseErr(err);
     }
   };
 
@@ -61,7 +54,7 @@ export const useAuth = () => {
         Alert.alert('ログインしました');
       }
     } catch (err: any) {
-      setAuthError('入力に誤りがあります。');
+      firebaseErr(err);
     }
   };
 
@@ -70,11 +63,7 @@ export const useAuth = () => {
   const signOut = async () => {
     auth.signOut()
       .then(() => {
-        navigation.reset({
-          index: 0,
-          routes: [{ name: 'Login' }],
-        });
-        Alert.alert('サインアウトしました');
+        Alert.alert('ログアウトしました');
       })
       .catch(() => {
         Alert.alert('ログアウトに失敗しました');

@@ -2,15 +2,15 @@ import 'dotenv/config';
 
 export default {
   expo: {
-    name: 'アプリ名',
-    slug: 'アプリ名',
+    name: 'MemoApp',
+    slug: 'MemoApp',
     version: '1.0.0',
     orientation: 'portrait',
     icon: './assets/icon.png',
     userInterfaceStyle: 'light',
     splash: {
       image: './assets/splash.png',
-      resizeMode: 'contain',
+      resizeMode: 'cover',
       backgroundColor: '#ffffff',
     },
     updates: {
@@ -18,12 +18,17 @@ export default {
     },
     assetBundlePatterns: ['**/*'],
     ios: {
-      supportsTablet: true,
+      supportsTablet: false,
+      bundleIdentifier: 'jp.takemal.memoApp',
+      buildNumber: '1.0.0',
     },
     android: {
+      package: 'jp.takemal.memoApp',
+      versionCode: 1,
+      permissions: [],
       adaptiveIcon: {
-        foregroundImage: './assets/adaptive-icon.png',
-        backgroundColor: '#FFFFFF',
+        foregroundImage: './assets/adaptiveFrontIcon.png',
+        backgroundImage: './assets/adaptiveBackIcon.png',
       },
     },
     web: {
